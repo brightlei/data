@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>铁路数据查询与管理系统</title>
+	    <script src="js/mui.min.js"></script>
+	    <script src="js/jquery.min.js"></script>
+	    <link href="css/mui.min.css" rel="stylesheet"/>
+	    <link rel="stylesheet" href="css/main.css" />
+	</head>
+	<body style="background: #f9f9f9;">
+		<div class="login_bg">
+			<div class="jh_div">
+				<img class="login_jh" src="images/login_logo.png"/>
+			</div>
+			<h3 class="login_title">铁路数据查询与管理系统</h3>
+			<div class="login_form_div mui-input-group" >
+				<div class="mui-input-row">
+			        <img src="images/police_user.png" class="login_icon"/>
+			    	<input id="username" type="text" class="mui-input-clear login_input" placeholder="请输入用户名" maxlength="30">
+			    </div>
+			    <div class="mui-input-row" style="margin-top:20px;">
+			        <img src="images/police_password.png" class="login_icon"/>
+			        <input id="userpwd" type="password" class="mui-input-password login_input" placeholder="请输入密码" maxlength="20">
+			    </div>
+				<div class="mui-input-row login_remember" style="margin-top:30px;height:45px;text-align:center;">
+					<button id="loginBtn" type="button" class="mui-btn mui-btn-block mui-btn-primary" style="border-radius:5px;width:90%;margin:0px auto;float:none;">登　录</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../jslib/jquery.json-2.2.min.js"></script>
+<script src="../jslib/log.js"></script>
+<script type="text/javascript">
+	mui.init({
+         
+    });
+    mui(document.body).on('tap', '.mui-btn', function(e) {
+        //mui(this).button('loading');
+        //$("#loginBtn span").eq(1).html("登录中，请稍候...");
+        var username = $("#username").val();
+        var userpwd = $("#userpwd").val();
+        if(username==null || username==""){
+        	mui.toast('用户名不能为空！');
+        	return;
+        }
+        if(userpwd==null || userpwd==""){
+        	mui.toast('用户密码不能为空！');
+        	return;
+        }
+        var $mui_btn = mui(this);
+        $mui_btn.button('loading');
+        $("#loginBtn span").eq(1).html("登录中，请稍候...");
+        $.ajax({
+			type:"post",
+			url:"../json/Login!login",
+			dataType:"json",
+			data:{username:username,userpwd:userpwd},
+			success:function(rsMap){
+				if(rsMap.state){
+					var user = rsMap.data;
+					sessionStorage.setItem("user",JSON.stringify(user));
+					savelog("系统登录","用户登录","username:"+username);
+					$("#loginBtn span").eq(1).html("登录成功，准备跳转！");
+					window.location.href="index.html";
+				}else{
+					$mui_btn.button('reset');
+					mui.toast("登录失败！"+rsMap.error);
+				}
+			},error:function(request, textStatus, errorThrown){
+				$mui_btn.button('reset');
+				mui.toast("登录失败！"+errorThrown);
+			}
+		});
+        /**
+        setTimeout(function() {
+            mui(this).button('reset');
+        }.bind(this), 2000);
+        */
+    });
+</script>

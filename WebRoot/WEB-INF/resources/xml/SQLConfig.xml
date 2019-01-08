@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs title="SQL语句配置">
+  <!-- 前台功能SQL语句 -->
+  <!-- 周边查询功能模块 -->
+  <queryNearLayerData title="查询周边图层数据">select t1.*,t2.name as layername,t2.iconurl,t2.showcolumns from #table# t1,t_layer t2 where t2.tablename='#table#' and t1.longitude between #xmin# and #xmax# and t1.latitude between #ymin# and #ymax#</queryNearLayerData>
+  <queryNearShortMsgData title="查询周边短期信息">select t1.*,t1.job_project as name,t2.name as layername,t2.iconurl,t2.showcolumns from t_shortmsg t1,t_layer t2 where t2.tablename='t_shortmsg' and convert(varchar, getdate(), 120) between t1.job_date+' '+SUBSTRING(t1.job_timespace,0,6)+':00' and t1.job_date+' '+SUBSTRING(t1.job_timespace,7,5)+':00'</queryNearShortMsgData>
+  <!-- 业务图层查询 -->
+  <searchLayerDataCount title="查询关键字图层总结">select count(t1.id) from #table# t1 where name like '%#keyword#%' or description like '%#keyword#%'</searchLayerDataCount>
+  <searchLayerDataByPage title="普通图层数据查询">select t1.*,t2.iconurl,t2.showcolumns from #table# t1 left join t_layer t2 on t2.tablename='#table#' where t1.name like '%#keyword#%' or t1.description like '%#keyword#%' order by createtime desc</searchLayerDataByPage>
+  <searchShortMsgLayerDataCount title="查询符合条件的短期信息总数">select count(t1.id) from view_shortmsg t1 where convert(varchar, getdate(), 120) between t1.job_starttime and t1.job_endtime and (make_unit like '%#keyword#%' or job_number like '%#keyword#%' or job_location like '%#keyword#%' or job_project like '%#keyword#%' or job_address like '%#keyword#%' or zz_fhr like '%#keyword#%' or xc_fhr like '%#keyword#%' or yf_fhr like '%#keyword#%')</searchShortMsgLayerDataCount>
+  <searchShortMsgLayerDataByPage title="查询符合条件的短期信息数据">select t1.* from view_shortmsg t1 where convert(varchar, getdate(), 120) between t1.job_starttime and t1.job_endtime and (make_unit like '%#keyword#%' or job_number like '%#keyword#%' or job_location like '%#keyword#%' or job_project like '%#keyword#%' or job_address like '%#keyword#%' or zz_fhr like '%#keyword#%' or xc_fhr like '%#keyword#%' or yf_fhr like '%#keyword#%') order by createtime desc</searchShortMsgLayerDataByPage>
+  <!-- 业务图层管理 -->
+  <addLayer title="添加业务图层">insert into t_layer(id,name,pcode,iconurl,nodetype) values('#primaryKey#','#name#','#pcode#','images/icon_location_20X24.png',#nodetype#)</addLayer>
+  <editLayer title="修改业务图层信息">update t_layer set name='#name#',iconurl='#iconurl#' where id='#id#'</editLayer>
+  <deleteLayer title="删除业务图层信息">delete from t_layer where id='#id#'</deleteLayer>
+  <deleteLayerByIds title="删除业务图层信息">delete from t_layer where id in (#ids#)</deleteLayerByIds>
+  <deleteLayerIconurl title="删除图标之后将原设置图标路径置空">update t_layer set iconurl='' where iconurl='#iconurl#'</deleteLayerIconurl>
+  <saveLayerShowColumn title="保存图层要显示的字段信息">update t_layer set showcolumns='#showcolumns#' where id='#id#'</saveLayerShowColumn>
+  <queryLayerInfo title="查询业务图层列表">select * from t_layer order by createtime</queryLayerInfo>
+  <queryLayerById title="根据ID查询图层信息">select * from t_layer where id='#id#'</queryLayerById>
+  <queryLayerByIds title="根据ID查询图层信息">select * from t_layer where id in(#ids#)</queryLayerByIds>
+  <queryLayerDataById title="根据ID查询图层数据">select * from t_fixdata where id='#id#'</queryLayerDataById>
+  <addLayerData title="添加业务图层数据">insert into t_fixdata(id,layercode,name,description,longitude,latitude,address,workshop,workarea,mainperson,telephone) values('#primaryKey#','#layercode#','#name#','#description#','#longitude#','#latitude#','#address#','#workshop#','#workarea#','#mainperson#','#telephone#')</addLayerData>
+  <editLayerData title="修改业务图层数据">update t_fixdata set name='#name#',description='#description#',longitude='#longitude#',latitude='#latitude#',address='#address#',workshop='#workshop#',workarea='#workarea#',mainperson='#mainperson#',telephone='#telephone#' where id='#id#'</editLayerData>
+  <deleteLayerData title="删除业务图层数据">delete from #table# where id='#id#'</deleteLayerData>
+  <queryLayerData title="获取图层数据">select t.*,t1.iconurl from t_fixdata t left join t_layer t1 on t.layercode=t1.code where layercode='#layercode#'</queryLayerData>
+  <importFixData title="导入固定信息数据">insert into t_fixdata(id,layercode,name,description,longitude,latitude,address,workshop,workarea,mainperson,telephone) values('#primaryKey#','#layercode#','#name#','#description#',#longitude#,#latitude#,'#address#','#workshop#','#workarea#','#mainperson#','#telephone#')</importFixData>
+  <importShortMsgData title="导入固定信息数据"></importShortMsgData>
+  <!-- 图层数据图片 -->
+  <queryLayerDataImage title="查询图层图片">select * from t_dataimg where dataid='#id#'</queryLayerDataImage>
+  <addLayerDataImage title="添加图层图片信息">insert into t_dataimg(id,dataid,name,imgpath,imgwidth,imgheight,smallimg) values('#primaryKey#','#dataid#','#name#','#imgpath#',#imgwidth#,'#imgheight#','#smallimg#')</addLayerDataImage>
+  <updateLayerDataImage title="修改图片名称">update t_dataimg set name='#name#' where id='#id#'</updateLayerDataImage>
+  <deleteLayerDataImage title="根据ID删除图片信息">delete from t_dataimg where id='#id#'</deleteLayerDataImage>
+  <getLayerDataImage title="根据ID获取图片信息">select * from t_dataimg where id='#id#'</getLayerDataImage>
+  <!-- 用户登录 -->
+  <userLogin title="用户登录">select t.id,t.username,t.userpwd,t.longitude,t.latitude,t1.name as xm,t1.headimg,t2.name as department from t_user t left join t_person t1 on t.personid=t1.id left join t_department t2 on t1.deptcode=t2.id where t.username='#username#'</userLogin>
+  <!-- 后台管理系统SQL配置结束 -->  
+  <!-- 用户日志管理 -->
+  <addLoginLog title="添加用户登录日志">insert into t_user_login(id,sid,ip,username,loginmethod) values('#primaryKey#','#sid#','#ip#','#username#','#loginmethod#')</addLoginLog>
+  <saveUserLog title="记录用户操作日志">insert into t_user_oplog(id,ip,name,username,optype,opcontent) values('#primaryKey#','#ip#','#name#','#username#','#optype#','#opcontent#')</saveUserLog>
+  <queryUserLogCount title="获取用户日志总数">select count(id) from t_user_oplog</queryUserLogCount>
+  <queryUserLog title="获取用户操作日志">select t.*,t2.name as userxm from t_user_oplog t,t_user t1,t_person t2 where t.username=t1.username and t1.personid=t2.id order by createtime desc</queryUserLog>
+  <!-- 字典分类 -->
+  <addDic title="添加字典分类数据">insert into t_dic(id,code,name) values('#primaryKey#','#code#','#name#')</addDic>
+  <editDic title="修改字典分类数据">update t_dic set code='#code#',name='#name#',edittime=CONVERT(varchar, getdate(), 120) where id='#id#'</editDic>
+  <deleteDic title="删除字典分类数据">delete from t_dic where id='#id#'</deleteDic>
+  <queryDic title="查询字典分类数据">select * from t_dic order by createtime desc</queryDic>
+  <queryDicData title="查询字典明细数据">select * from t_dicdata where diccode='#diccode#' order by rank</queryDicData>
+  <addDicData title="添加字典分类数据">insert into t_dicdata(id,diccode,code,name,rank) values('#primaryKey#','#diccode#','#code#','#name#','#rank#')</addDicData>
+  <editDicData title="修改字典分类数据">update t_dicdata set code='#code#',name='#name#',rank='#rank#',edittime=CONVERT(varchar, getdate(), 120) where id='#id#' and diccode='#diccode#'</editDicData>
+  <deleteDicData title="删除字典明细数据">delete from t_dicdata where id='#id#'</deleteDicData>
+  <!-- 部门信息 -->
+  <addDept title="添加部门信息">insert into t_department(id,code,name,pcode) values('#primaryKey#','#code#','#name#','#pcode#')</addDept>
+  <editDept title="修改部门信息">update t_department set name='#name#',edittime=CONVERT(varchar, getdate(), 120) where id='#id#'</editDept>
+  <deleteDept title="删除部门信息">delete from t_department where id='#id#'</deleteDept>
+  <queryDept title="查询部门数据">select * from t_department order by createtime</queryDept>
+  <!-- 人员信息 -->
+  <addPerson title="添加人员信息">insert into t_person(id,name,deptcode,diccode,telephone,description,headimg) values('#primaryKey#','#name#','#deptcode#','#diccode#','#telephone#','#description#','#headimg#')</addPerson>
+  <editPerson title="修改人员信息">update t_person set name='#name#',deptcode='#deptcode#',diccode='#diccode#',telephone='#telephone#',description='#description#',headimg='#headimg#',edittime=CONVERT(varchar, getdate(), 120) where id='#id#'</editPerson>
+  <getPerson title="查询人员信息">select t.*,t1.name as department,t2.name as duty from t_person t left join t_department t1 on t.deptcode=t1.id left join t_dicdata t2 on t.diccode=t2.id</getPerson>
+  <deletePerson title="删除人员信息">delete from t_person where id='#id#'</deletePerson>
+  <!-- 铁路线路管理20170906 -->
+  <listRailwayLine title="加载铁路线路信息">select distinct(linenum),name,t.linenum+'('+t.name+')' as linename from t_linepoint t</listRailwayLine>
+  <getRailwayLinePoint title="获取铁路线坐标点">select * from t_railway_point where linenum='#lineno#' order by longitude,latitude</getRailwayLinePoint>
+  <queryAllLinePoint title="加载铁路线所有坐标点">select * from t_railway_point order by longitude,latitude</queryAllLinePoint>
+  <!-- 铁路线坐标点管理20170908 -->
+  <addRailwayPoint title="添加铁路线坐标点">insert into t_railway_point(id,linenum,longitude,latitude) values('#primaryKey#','#lineno#','#lon#','#lat#')</addRailwayPoint>
+  <deleteRailwayPoint title="删除铁路坐标点">delete from t_railway_point where id='#id#'</deleteRailwayPoint>
+  <!-- 铁路线里程坐标点 -->
+  <addLinePoint title="添加铁路线里程坐标表">insert into t_linepoint(id,lonstr,latstr,longitude,latitude,mileage,name,linenum,direction,longchain) values('#primaryKey#','#lonstr#','#latstr#',#longitude#,#latitude#,#mileage#,'#name#','#linenum#','#direction#','#longchain#')</addLinePoint>
+  <editLinePoint title="修改铁路里程坐标表">update t_linepoint set lonstr='#lonstr#',latstr='#latstr#',longitude=#longitude#,latitude=#latitude#,mileage=#mileage#,name='#name#',linenum='#linenum#',direction='#direction#',longchain='#longchain#' where id='#id#'</editLinePoint>
+  <deleteLinePoint title="删除铁路里程坐标费">delete from t_linepoint where id='#id#'</deleteLinePoint>
+  <listLinePoint title="加载铁路里坐标点数据">select * from t_linepoint order by createtime desc</listLinePoint>
+  <listLineMileagePoint title="加载铁路里坐标点数据">select * from t_linepoint where linenum='#linenum#' order by mileage</listLineMileagePoint>
+  <!-- 数据表字段管理 -->
+  <getTableColumns title="获取表字段信息">
+  select sys.columns.name as column_name, sys.types.name as data_type, sys.columns.max_length, sys.columns.is_nullable, 
+  (select count(*) from sys.identity_columns where sys.identity_columns.object_id = sys.columns.object_id and sys.columns.column_id = sys.identity_columns.column_id) as is_identity ,
+  (select value from sys.extended_properties where sys.extended_properties.major_id = sys.columns.object_id and sys.extended_properties.minor_id = sys.columns.column_id) as description
+  from sys.columns, sys.tables, sys.types where sys.columns.object_id = sys.tables.object_id and sys.columns.system_type_id=sys.types.system_type_id and sys.tables.name='#table#' and sys.types.name!='sysname' order by sys.columns.column_id
+  </getTableColumns>
+  <addTableColumn title="添加表字段">ALTER TABLE [#table#] ADD #column_name# #columnType#</addTableColumn>
+  <addTableColumnComment title="添加字段说明">sp_addextendedproperty N'MS_Description', N'#description#', 'USER', N'dbo', 'TABLE', N'#table#', 'COLUMN', N'#column_name#'</addTableColumnComment>
+  <editTableColumn title="修改表字段">ALTER TABLE #table# ALTER COLUMN #column_name# #columnType#</editTableColumn>
+  <editTableColumnComment title="修改字段说明">sp_updateextendedproperty 'MS_Description','#description#','user',dbo,'table','#table#','column',#column_name#</editTableColumnComment>
+  <deleteTableColumn title="删除表字段">ALTER TABLE [#table#] DROP COLUMN [#column_name#]</deleteTableColumn>
+  <getLayerById title="根据ID获取业务图层信息">select * from t_layer where tablename='#table#'</getLayerById>
+  <getTableData title="加载表数据">select t1.*,t2.iconurl from #table# t1,t_layer t2 where layercode='#layercode#' and t1.layercode=t2.code order by createtime desc</getTableData>
+  <getTableDataCount title="根据条件获取数据总数">select count(id) as count from #table#</getTableDataCount>
+  <getTableDataByPage title="获取分页数据">select t1.* from #table# t1 order by createtime desc</getTableDataByPage>
+  <getShortMsgDataByPage title="获取短期信息数据">select t1.*,t2.iconurl from t_shortmsg t1,t_layer t2 where layercode in (#layercodes#) and t1.layercode=t2.code and convert(varchar, getdate(), 120) between t1.job_date+' '+SUBSTRING(t1.job_timespace,0,6)+':00' and t1.job_date+' '+SUBSTRING(t1.job_timespace,7,5)+':00'</getShortMsgDataByPage>
+  <!-- 角色权限 -->
+  <addRoleRight title="添加权限信息">insert into t_roleright(code,name,pcode) values('#code#','#name#','#pcode#')</addRoleRight>
+  <editRoleRight title="修改权限信息">update t_roleright set name='#name#',pageurl='#pageurl#',operate='#operate#' where id='#id#' and code='#code#'</editRoleRight>
+  <deleteRoleRight title="删除权限信息">delete from t_roleright where id='#id#' and code='#code#'</deleteRoleRight>
+  <getRoleRight title="获取权限信息">select * from t_roleright</getRoleRight>
+  <!-- 角色管理 -->
+  <addRole title="添加角色信息">insert into t_role(code,name) values('javaclass:rolecode:ROLE','#name#')</addRole>
+  <queryRole title="查询角色信息">select * from t_role</queryRole>
+  <savePageRole title="保存用户页面权限">update t_role set pageright='#pageright#' where id='#id#'</savePageRole>
+  <saveDataRole title="保存用户数据权限">update t_role set dataright='#dataright#' where id='#id#'</saveDataRole>
+  <deleteRole title="删除用户角色">delete from t_role where id='#id#'</deleteRole>
+  <!-- 用户信息 -->
+  <addUser title="添加用户信息">insert into t_user(id,username,userpwd,personid,roleid,longitude,latitude) values('#primaryKey#','#username#','123456','#personid#','#roleid#',112.1331,32.053646)</addUser>
+  <editUser title="设置用户位置">update t_user set longitude='#longitude#',latitude='#latitude#' where id='#id#'</editUser>
+  <deleteUser title="删除用户信息">delete from t_user where id='#id#'</deleteUser>
+  <listUser title="查询用户信息">select t.id,t.username,t.userpwd,t.personid,t.longitude,t.latitude,t.createtime,t.edittime,t1.name,t1.telephone,t2.name as department,t3.name as duty,t4.name as rolename from t_user t left join t_person t1 on t.personid=t1.id left join t_department t2 on t1.deptcode=t2.id left join t_dicdata t3 on t1.diccode=t3.id left join t_role t4 on t.roleid=t4.id</listUser>
+  <setUserRole title="设置用户角色">update t_user set roleid='#roleid#' where id='#id#'</setUserRole>
+  <!-- 日志信息 -->
+  <listLog title="加载系统日志">select * from t_log4j order by id desc</listLog>
+  <listUserLoginLog title="用户登录日志信息">select t.ip,t.username,t2.name as userxm,t.loginmethod,t.logintime,t1.longitude,t1.latitude from t_user_login t left join t_user t1 on t.username=t1.username left join t_person t2 on t1.personid=t2.id where t.leavetime is null order by logintime desc</listUserLoginLog>
+  <!-- 系统测试 -->
+  <addTestRecord title="添加测试信息">insert into t_test(xh,xtmc,ylmc,ylbs,ylmd,qttj,czbz,yqjg,scjg,ppbz,jgzt,sjxg,xgsm) values('#xh#','#xtmc#','#ylmc#','#ylbs#','#ylmd#','#qttj#','#czbz#','#yqjg#','#scjg#','#ppbz#','#jgzt#','#sjxg#','#xgsm#')</addTestRecord>
+  <queryTest>select * from t_test</queryTest>
+  <editTest>update t_test set sjxg=1 where id=#id#</editTest>
+  <addTest>insert into t_test(id,name,age,ss) values('#primaryKey#','#name#','#age#','#ss#')</addTest>
+  <updateTest>update t_test set name='#name#',age='#age#',ss='#ss#' where id='#id#'</updateTest>
+  <queryTest>select * from t_test where name like '%#name#%' or ss like '%#ss#%'</queryTest>
+</configs>

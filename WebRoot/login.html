@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>铁路数据查询与管理系统</title>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<script language="javascript" type="text/javascript" src="jslib/jeasyui.js"></script>
+	<script language="javascript" type="text/javascript" src="jslib/jquery.cookie.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="layer/layer-common.js"></script>
+	<script type="text/javascript" language="javascript">
+		$(function(){
+			//$("#loginbg").css("opacity","0.6");
+			autoHeight();
+			$(window).resize(function(){autoHeight();});
+			var username = $.cookie('user_cookie');
+			var pwd = $.cookie('pwd_cookie');
+			if(username!=null){
+				$("#username").val(username);
+			}
+			if(pwd!=null){
+				$("#userpwd").val(pwd);
+			}
+			//$("#loginMsg").css("opacity",0.6);
+			document.onkeydown = function (event) {
+                var e = event || window.event || arguments.callee.caller.arguments[0];
+                if (e && e.keyCode == 13) {
+                    loginSystem();
+                }
+            };
+		})
+		
+		//登录表单自适应窗口大小
+		function autoHeight(){
+			var w = jQuery(document.body).width();
+			var h = jQuery(document.body).height();
+			var w1 = $("#logindiv").width();
+			var h1 = $("#logindiv").height();
+			var top = parseInt((h-h1)/2);
+			var left = parseInt((w-w1)/2);
+			$("#logindiv").css("top",top+"px").css("left",left+"px");
+			$("#loginbg").css("top",top+"px").css("left",left+"px");
+		}
+		//登录系统
+		function loginSystem(){
+			var username = $("#username").val();
+			var userpwd = $("#userpwd").val();
+			if(username==null || username==""){
+				layer.msg("用户名不能为空，请输入用户名！",{icon:0});
+				$("#username").focus();
+				return;
+			}
+			if(userpwd==null || userpwd==""){
+				layer.msg("用户密码不能为空，请输入密码！",{icon:0});
+				$("#userpwd").focus();
+				return;
+			}
+			$("#loginBtnDiv p").text("正在进行身份验证，请稍候……");
+			$.ajax({
+				type:"post",
+				url:"json/Login!login",
+				dataType:"json",
+				data:{username:username,userpwd:userpwd},
+				success:function(rsMap){
+					if(rsMap.state){
+						$.cookie('user_cookie',username);
+						$.cookie('pwd_cookie',userpwd);
+						var data = rsMap.data;
+						$.cookie('user_id',data.id);
+						$.cookie('user_xm',data.xm);
+						savelog("系统登录","用户登录","username:"+username);
+						$("#loginBtnDiv p").text("登录成功，准备跳转！");
+						window.location.href="index.html";
+					}else{
+						$("#loginBtnDiv p").text("登录");
+						layer.msg("登录失败！"+rsMap.error,{icon:5});
+					}
+				},error:function(request, textStatus, errorThrown){
+					$("#loginBtnDiv p").text("登录");
+					layer.msg("登录失败！"+errorThrown,{icon:5});
+				}
+			});
+		}
+	</script>
+  </head>
+  
+  <body style="overflow:hidden;">
+   <!-- 登录界面开始 -->
+  	<div id="loginbg" style="position:absolute;width:602px;height:450px;top:0px;z-index:99;background:rgba(255,255,255,0.6);"></div>
+  	<div id="logindiv" class="login-form" style="position:absolute;width:600px;height:450px;z-index:999;left:0px;top:0px;">
+  		<div id="content" class="content">
+	  		<div class="logintitle">铁路数据查询与管理系统</div>
+	  		<div id="login" class="center">
+				<p id="loginStatuText" style="text-align:center;margin:5px 0px;"></p>
+				<div class="formItem">
+					<p>用户名<span id="nameTips" class="validtips"></span></p>
+					<input placeholder="请输入您的登录用户名" id="username" type="text" maxlength=20 value=""/>
+				</div>
+				<div class="formItem">
+					<p>密码<span id="pwdTips" class="validtips"></span></p>
+					<input placeholder="请输入您的登录密码" id="userpwd" type="password"  maxlength=20 value=""/>
+				</div>
+				<div style="margin-top:30px;" id="loginBtnDiv"><p class="loginBtn" onclick="loginSystem()">登录</p></div>
+			</div>
+	  	</div>
+  	</div>
+  	<!-- 登录界面结束 -->
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>业务图层管理</title>
+    <style type="text/css">
+    #iconlist img{width:50px;height:50px;border:1px solid #ccc;margin:2px;}
+    .dataTable td{padding:3px;}
+    .tbform td{padding:3px;}
+    .tbform td input{width:100px;}
+    .radiocss{position:relative;top:3px;}
+    .inputcss{padding:5px;border:1px solid #f7f7f7;}
+    .dataTable td{padding:5px;}
+    .ulcss{padding:0px;margin:0px;}
+    .ulcss li{padding:5px;display:inline-block;font:13px 微软雅黑;width:200px;border:1px solid #f7f7f7;margin:2px;}
+    .ulcss li input{position:relative;top:2px;width:15px;height:15px;}
+    .formtb td{padding:0px 3px;}
+    </style>
+	<script type="text/javascript" src="../jslib/server.js"></script>
+	<script type="text/javascript" src="../jslib/jeasyui.js?t=1"></script>
+	<script type="text/javascript" src="js/admin_layer.js?t=1236"></script>
+  </head>
+<body oncontextmenu="return false" style="background:#FFFFFF;" class="easyui-layout">
+	<div id="formWin" title="表字段添加表单" class="easyui-window" data-options="closed:true" style="width:600px;height:300px;padding:5px;overflow:hidden;">
+		<input type="hidden" id="op" value="add"/>
+		<table class="dataTable" border="1" bordercolor="#ccc" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+			<tr>
+				<td style="width:130px;text-align:right;">字段名称：</td>
+				<td><input id="name" class="easyui-textbox" data-options="prompt:'请输入字段名称，不允许包含数字和汉字，建议输入英文字母'" style="width:100%;height:30px;"></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字段类型：</td>
+				<td>
+					<select id="columnType" style="height:22px;line-height:22px;" onchange="showLength()">
+						<option value="int">长整形数值(int)</option>
+						<option value="float">符点形数值(float)</option>
+						<option value="decimal">数值形(decimal)</option>
+						<option value="varchar">字符串(varchar)</option>
+					</select>
+					<span id="charlength" style="display:none;">字符长度：<input type="text" id="column_length" value="2000" style="height:22px;line-height:22px;width:80px;"/></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字段说明：</td>
+				<td><input id="description" class="easyui-textbox" data-options="prompt:'请输入字段说明'" style="width:100%;height:30px;"></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<a href="javascript:void(0)" class="easyui-linkbutton c9" data-options="iconCls:'icon-ok'" onclick="doSubmitAction()" style="width:60px;height:30px;">提交</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="showSetWin" title="表字段显示设置" class="easyui-window" data-options="closed:true,minimizable:false,collapsible:false" style="width:700px;height:400px;">
+		<div class="easyui-layout" fit=true>
+			<div data-options="region:'center'" style="padding:5px;overflow:auto;">
+				<ul id="column-list" class="ulcss">
+					
+				</ul>
+			</div>
+			<div data-options="region:'south'" style="height:44px;padding:5px;overflow:hidden;">
+				<a href="javascript:void(0)" class="easyui-linkbutton c9" data-options="iconCls:'icon-save'" onclick="saveColumnShowAction()" style="width:80px;height:30px;">保存设置</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton c2" data-options="iconCls:'icon-cancel'" onclick="$('#showSetWin').window('close');" style="width:80px;height:30px;">取消</a>
+			</div>
+		</div>
+	</div>
+	<div data-options="region:'west'" style="width:200px;padding:5px;">
+        <div id="treePanel" class="easyui-panel" title="业务图层分类信息列表" fit="true" style="padding:0px;">
+			<div id="treeOpTips" style="display:none;position:absolute;left:10px;top:38px;z-index:555;width:230px;padding:5px;background:#eee;font-weight:bold;color:blue;"></div>
+			<div id="ids"></div>
+			<div id="mm" class="easyui-menu" style="width:120px;">
+			    <div id="appendClassBtn" onclick="addLayerClass()" data-options="iconCls:'icon-hamburg-folder'">添加图层分类</div>
+			    <div id="deleteClassBtn" onclick="removeLayerClass()" data-options="iconCls:'icon-remove'">删除图层分类</div>
+			    <div id="appendBtn" onclick="appendTreeNode()" data-options="iconCls:'icon-hamburg-database'">添加图层</div>
+			    <div id="deleteBtn" onclick="removeit()" data-options="iconCls:'icon-remove'">删除图层</div>
+		    </div>
+            <ul id="menuTree" class="easyui-tree" style="margin:10px;"></ul>
+		</div>
+    </div>
+	<div id="regionCenter" data-options="region:'center'" style="padding:0px;">
+		<div class="easyui-layout" fit="true" style="width:100%;height:100%;">
+			<!-- 图标列表 -->
+			<div id="iconbox" style="display:none;position:absolute;left:316px;top:37px;z-index:999;width:308px;height:180px;background:red;">
+				<div id="iconlist" class="easyui-panel" title="图标列表" data-options="closable:false,width:308,height:178,onBeforeClose:onBeforeClose" style="padding:5px;">
+					
+				</div>
+			</div>
+			<div data-options="region:'north'" style="height:42px;padding:5px;overflow:hidden;">
+				<p style="display:none;">
+					<span>图层ID：</span>
+					<span><input type="text" class="disabled" id="layer_id" disabled style="width:300px;padding:5px;"/></span>
+					<span>图层编码：</span>
+					<span><input type="text" class="disabled" id="layer_code" disabled style="width:300px;padding:5px;"/></span>
+				</p>
+				<div style="margin-top:0px;">
+					<table class="formtb" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td id="span_layername">图层名称：</td>
+							<td><input type="text" class="input122" id="layer_name" style="width:160px;padding:3px;"/></td>
+							<td class="span_layer_icon">图标地址：</td>
+							<td class="span_layer_icon"><img id="layer_iconurl" style="margin-top:2px;width:26px;height:26px;border:1px solid #eee;cursor:pointer;" onclick="showIcons(this);"/></td>
+							<td><a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="width:60px;height:30px;" onclick="updateMenu()">提交</a></td>
+						</tr>
+					</table>
+				</div>
+				<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+			</div>
+			<div data-options="region:'center',border:false" style="padding:5px;overflow:hidden;">
+				<div id="blankDiv" style="display:none;background:#fff;position:absolute;left:0px;top:2px;z-index:999;width:100%;height:100%;"></div>
+				<div id="tb" style="padding:5px;">
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addAction()">添加</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editAction()">修改</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteAction()">删除</a>
+					<span>|</span>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-hamburg-config',plain:true" onclick="showSetWin()">设置显示的字段</a>
+					<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+					<span>|</span>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-standard-page-white-excel',plain:true" onclick="saveExcelTemplate()">生成表格数据导入模板</a>
+				</div>
+				<table id="dg"></table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

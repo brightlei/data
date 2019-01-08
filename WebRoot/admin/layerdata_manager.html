@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>业务图层数据管理</title>
+    <style type="text/css">
+    #iconlist img{width:50px;height:50px;border:1px solid #ccc;margin:2px;}
+    .dataTable td{padding:5px;}
+    /*表单样式**/
+	.tbform td{padding:3px;}
+	.tbform td input{width:400px;line-height:24px;height:24px;margin-right:5px;padding-left:5px;}
+	.rightcss{text-align:right;}
+    </style>
+	<script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="js/admin_layerdata.js?t=1"></script>
+	<script type="text/javascript" src="../layer/layer.js"></script>
+	<script type="text/javascript" src="../layer/layer-common.js"></script>
+  </head>
+<body oncontextmenu="return false" style="background:#FFFFFF;" class="easyui-layout">
+	<div id="mapWin" title="坐标点采集" style="display:block;width:800px;height:442px;padding:0px;">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'center'" style="padding:0px;overflow:hidden;">
+				<iframe id="mapFrame" noresize="noresize" height="100%" width="100%" border="0" frameborder="0" scrolling="no" style="background-color:#FFFFff;" src=""></iframe>
+			</div>
+			<div data-options="region:'south'" style="text-align:right;padding:6px;overflow:hidden;">
+				<input type="hidden" id="userid" value=""/>
+				<span id="pointinfo" style="float:left;margin:2px;font-weight:bold;font-size:13px;color:blue;">坐标点信息：经度：<label id="l-lon">112.31231</label>，纬度：<label id="l-lat">30.123123</label></span>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="setPosition()" style="width:80px">确定</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="cancelSave()" style="width:80px">取消</a>
+			</div>
+		</div>
+	</div>
+	<div data-options="region:'west'" style="width:200px;padding:5px;">
+        <div id="treePanel" class="easyui-panel" title="业务图层分类信息列表" fit="true" style="padding:0px;">
+			<div id="treeOpTips" style="display:none;position:absolute;left:10px;top:38px;z-index:555;width:230px;padding:5px;background:#eee;font-weight:bold;color:blue;"></div>
+			<div id="ids"></div>
+            <ul id="menuTree" class="easyui-tree" style="margin:10px;"></ul>
+		</div>
+    </div>
+	<div id="regionCenter" data-options="region:'center'" style="padding:5px;">
+		<div id="tb" style="padding:5px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addLayerData()">添加</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editLayerData()">修改</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteLayerData()">删除</a>
+			<span>|</span>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-standard-page-white-excel',plain:true" onclick="showImportWin()">批量导入数据</a>
+			<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+		</div>
+		<table id="dg"></table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+*{margin:0px;padding:0px;}
+body,html{width:100%;height:100%;font-family:"微软雅黑";font-size:16px;}
+ul,li{list-style:none;}
+a{text-decoration:none;}
+a{color:#0063E6;}
+a:hover{color:#FF6600;}
+/**/
+.hiddentext{text-overflow:ellipsis; white-space:nowrap; overflow:hidden;padding-left:5px;padding-right:5px;}
+.divProgressBody-Wait{width:39px;height:39px;background:url(../images/loading00.gif) no-repeat center;}
+.ulcss{margin:0px;padding:5px;}
+.ulcss li{width:100%;display:inline-block;}
+.ulcss .time{text-align:center;font:14px 微软雅黑;color:#999;padding:0px;border-bottom:1px solid #f7f7f7;}
+.ulcss .usercss{font:14px 微软雅黑;font-weight:bold;padding:2px 5px;}
+.ulcss .content{display:inline-block;font:14px 微软雅黑;padding:2px 5px;background:#f7f7f7;magrin-bottom:5px;}
+.selectLi{background:#5677FC;color:#fff;}
+.userlist li{font:14px 微软雅黑;padding:2px 5px;border-bottom:1px solid #f7f7f7;}
+.nav-list li{border-bottom:1px solid #f7f7f7;padding:3px 5px 0px 15px;cursor:pointer;}
+.nav-list li:hover{background:#5677FC;color:#fff;}
+.nav-icon{display:inline-block;width:20px;height:20px;}
+.nav-text{display:inline-block;font:14px 微软雅黑;position:relative;top:-5px;}
+/*用户图层列表*/
+.overlayer{display:none;position:absolute;right:8px;top:36px;z-index:999;background:#f7f7f7;border:1px solid #AAA;font:14px 微软雅黑;}
+.overlayer p{padding:0px 5px;line-height:24px;border-bottom:1px solid #eee;}
+.overlayer .ckbcss{position:relative;top:3px;width:16px;height:16px;margin-right:3px;}
+.overlayer a{display:inline-block;}
+.overlayer img{float:left;margin-right:3px;margin-top:3px;cursor:pointer;}
+.layertitle{width:80px;background:#02A1E2;color:#fff;font-weight:bold;}
+/*详细信息样式*/
+.sta_att{text-align:right;}
+.sta_att_value{padding-left:10px;color:#999999;}
+.attUnit{color:#CCCCCC;}
+/*表单样式**/
+.tbform td{padding:3px;}
+.tbform td input{width:100%;line-height:22px;height:22px;}
+.myPopupInfo div{height:22px;line-height:22px;}
+.info-table td{padding:3px 0px;}
+.info-table th{padding:3px 0px;width:66px;text-align:right;}

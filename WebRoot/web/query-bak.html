@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>周边信息查询模块</title>
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="../jsweb/query.js?t=1"></script>
+  </head>
+  
+<body oncontextmenu="return false" style="background:#FFFFFF;" class="easyui-layout">
+	<div data-options="region:'west'" style="width:260px;padding:5px;">
+        <div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'center',title:'业务图层分类信息列表'" style="padding:5px;">
+				<div id="treeOpTips" style="display:none;position:absolute;left:10px;top:38px;z-index:555;width:230px;padding:5px;background:#eee;font-weight:bold;color:blue;"></div>
+				<div id="ids"></div>
+	            <ul id="menuTree" class="easyui-tree" style="margin:0px;"></ul>
+			</div>
+			<div data-options="region:'south',border:false" style="height:40px;padding:8px;overflow:hidden;">
+				<span style="margin:3px;">周边距离：<input tpye="text" id="radius" value="1000" style="width:40px;height:22px;line-height:22px;"/>米</span>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="queryNearData()">查询</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-clear'" href="javascript:void(0)" onclick="clearQueryNearData()">清除</a>
+			</div>
+		</div>
+    </div>
+	<div id="regionCenter" data-options="region:'center'" style="padding:5px;">
+		<div class="easyui-panel" title="查询结果列表" data-options="fit:true">
+			<div id="result" class="easyui-tabs" data-options="fit:true">
+				<div title="业务图层数据">
+					<table id="dg" class="easyui-datagrid" data-options="
+						fit:true,
+						rownumbers:true,
+						singleSelect:true">
+						<thead>
+							<tr>
+								<!-- <th field="layer" width="100">图层分类</th> -->
+								<th field="layername" width="100">图层分类</th>
+								<th field="name" width="280">数据名称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div title="百度POI数据">
+					<table id="dg-bd" class="easyui-datagrid" data-options="
+						fit:true,
+						rownumbers:true,
+						pagination:true,
+						singleSelect:true">
+						<thead>
+							<tr>
+								<!-- <th field="op" width="40" formatter="opFormatter">操作</th> -->
+								<th field="layer" width="100" formatter="bdLayerFormatter">图层分类</th>
+								<th field="name" width="280">数据名称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

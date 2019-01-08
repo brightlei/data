@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>图层数据管理模块</title>
+    <style type="text/css">
+    #iconlist img{width:50px;height:50px;border:1px solid #ccc;margin:2px;}
+    .dataTable td{padding:3px;}
+    </style>
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="../jsweb/layerinfo.js?t=12"></script>
+  </head>
+<body oncontextmenu="return false" style="background:#FFFFFF;" class="easyui-layout">
+	<!-- 数据导入 -->
+	<div id="importWin" title="数据导入" class="easyui-window" data-options="closed:true" style="width:600px;height:300px;">
+		<iframe noresize="noresize" id="mainFrame" name="mainFrame" height="100%" width="100%"
+			border="0" frameborder="0" scrolling="auto"
+			style="background-color:#FFFFff;">
+		</iframe>
+	</div>
+	<!-- 图层数据管理 -->
+	<div id="dataWin" title="图层数据采集" class="easyui-window" data-options="closed:true" style="width:400px;height:300px;">
+		<input type="hidden" id="layerdata_id" value=""/>
+		<table class="dataTable" border="1" bordercolor="#ccc" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+			<tr>
+				<td style="text-align:right;">数据名称：</td>
+				<td><input id="name" class="easyui-textbox" data-options="prompt:'请输入图层数据名称'" style="width:100%;height:30px;"></td>
+			</tr>
+			<tr>
+				<td style="width:100px;text-align:right;">地址：</td>
+				<td><input id="address" class="easyui-textbox" data-options="prompt:'请输入地理位置'" style="width:100%;height:30px;"></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">坐标信息：</td>
+				<td style="position:relative;">
+					<p>经度：<input type="text" id="longitude" style="width:160px;"/></p>
+					<p style="margin-top:5px;">纬度：<input type="text" id="latitude" style="width:160px;"/></p>
+					<span style="position:absolute;right:10px;top:10px;"><a href="javascript:void(0)" class="easyui-linkbutton">采集坐标点</a></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">描述信息：</td>
+				<td><input id="description" class="easyui-textbox" data-options="prompt:'请输入描述信息',multiline:true" style="width:100%;height:90px;"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<a href="javascript:void(0)" class="easyui-linkbutton c9" data-options="iconCls:'icon-ok'" onclick="saveLayerData()" style="width:60px;height:30px;">提交</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div data-options="region:'west'" style="width:200px;padding:5px;">
+        <div id="treePanel" class="easyui-panel" title="业务图层分类信息列表" fit="true" style="padding:0px;">
+			<div id="treeOpTips" style="display:none;position:absolute;left:10px;top:38px;z-index:555;width:230px;padding:5px;background:#eee;font-weight:bold;color:blue;"></div>
+			<div id="ids"></div>
+			<div id="mm" class="easyui-menu" style="width:120px;">
+			    <div onclick="append()" data-options="iconCls:'icon-add'">添加图层</div>
+			    <div onclick="removeit()" data-options="iconCls:'icon-remove'">删除图层</div>
+		    </div>
+            <ul id="menuTree" class="easyui-tree" style="margin:10px;"></ul>
+		</div>
+    </div>
+	<div id="regionCenter" data-options="region:'center'" style="padding:0px;">
+		<!-- 图标列表 -->
+		<div id="iconbox" style="display:none;position:absolute;left:242px;top:36px;z-index:999;width:308px;height:130px;">
+			<div id="iconlist" class="easyui-panel" title="图标列表" data-options="closable:true,fit:true,onBeforeClose:onBeforeClose" style="padding:5px;">
+				
+			</div>
+		</div>
+		<div class="easyui-layout" fit="true" style="width:100%;height:100%;">
+			<div data-options="region:'north'" style="height:40px;padding:5px;overflow:hidden;">
+				<p style="display:none;">
+					<span>图层ID：</span>
+					<span><input type="text" class="disabled" id="layer_id" disabled style="width:300px;padding:5px;"/></span>
+					<span>图层编码：</span>
+					<span><input type="text" class="disabled" id="layer_code" disabled style="width:300px;padding:5px;"/></span>
+				</p>
+				<div style="margin-top:-15px;">
+					<span>图层名称：</span>
+					<span><input type="text" class="input122" id="layer_name" style="width:160px;padding:3px;"/></span>
+					<span>图层类型：</span>
+					<span><input type="text" class="input122" id="layer_type" style="width:130px;padding:3px;"/></span>
+					<span>图标地址：</span>
+					<span><img id="layer_iconurl" style="position:relative;top:12px;width:32px;height:32px;border:1px solid #eee;cursor:pointer;" onclick="showIcons(this);"/></span>
+					<span><a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="width:60px;height:30px;" onclick="updateMenu()">提交</a></span>
+				</div>
+				<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+			</div>
+			<div data-options="region:'center',border:false" style="padding:5px;overflow:hidden;">
+				<div id="tb" style="padding:5px;">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-cologne-plus'" onclick="addLayerData()">添加</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-cologne-pencil'" onclick="editLayerData()">修改</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-standard-cross'" onclick="deleteLayerData()">删除</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-hamburg-database'" onclick="showImportWin()">批量导入</a>
+				</div>
+				<table id="dg" title="图层数据列表" class="easyui-datagrid" data-options="
+					fit:true,
+					rownumbers:true,
+					singleSelect:true,
+					toolbar:'#tb',
+					onClickRow:clickRowAction">
+					<thead>
+						<tr>
+							<th field="op" width="70" formatter="opFormatter">操作</th>
+							<th field="name" width="100">名称</th>
+							<th field="workshop" width="90">所属车间</th>
+							<th field="workarea" width="90">所属工区</th>
+							<th field="mainperson" width="70">负责人</th>
+							<th field="telephone" width="120">联系电话</th>
+							<th field="description" width="160">描述信息</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+1.http://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.54admin.net
+2.http://b.bshare.cn/barCode?site=weixin&url=http://www.54admin.net
+3.http://s.jiathis.com/qrcode.php?url=http://www.54admin.net
+4.http://qr.liantu.com/api.php?text=http://www.54admin.net
+5.http://api.k780.com:88/?app=qr.get&data=http://www.54admin.net&level=L&size=6        
+6.https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://www.54admin.net
+二维码生成地址
+http://pan.baidu.com/share/qrcode?w=182&h=182&url=http://www.mapgis.com

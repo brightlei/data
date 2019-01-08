@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>jstree</title>
+	<script type="text/javascript" src="jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="plugins/jstree/jstree-load.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$('#jstree_demo_div').jstree({'core' : {  
+	        'data' : [  
+	            {  
+	                "text" : "Same but with checkboxes",  
+	                "children" : [  
+	                    { "text" : "initially selected", "state" : { "selected" : true } },  
+	                    { "text" : "custom icon URL"},  
+	                    { "text" : "initially open", "state" : { "opened" : true }, "children" : [ "Another node" ] },  
+	                    { "text" : "custom icon class"}  
+	                ]  
+	            },  
+	            "And wholerow selection"  
+	        ]  
+	    }}); 
+	    $('#jstree_demo_div').on("changed.jstree", function (e, data) {  
+		    console.log("The selected nodes are:");  
+		    console.log(data.node.id);               //选择的node id  
+		    console.log(data.node.text);            //选择的node text  
+		});  
+	});
+</script>  
+</head>
+<body class="easyui-layout" onload="onloadComplete()">
+    <div data-options="region:'north',border:false" style="height:60px;overflow:hidden;/*background:#002C49;*/background:url(images/bg.jpg);">
+    	<div style="font:36px 微软雅黑;font-weight:bold;">
+    		<span style="float:left;margin-left:12px;margin-top:2px;color:#fff;">铁路数据查询与管理系统</span>
+    	</div>
+		<div id="div_calender" style="position:absolute;right:0px;top:1px;padding:2px 5px;font:13px 微软雅黑;font-weight:bold;color:#fff;"></div>
+		<div style="position:absolute;bottom:5px;right:5px;">
+			<a id="fav" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cologne-star'">收藏本页</a>
+		    <a href="logout.jsp" class="easyui-linkbutton" data-options="toggle:true,iconCls:'icon-cologne-logout'">注销登录</a>
+        </div>
+    </div>   
+    <div data-options="region:'center'" style="padding:0px;overflow:hidden;">
+    	<div id="tab-tools" style="border-top:0px;">
+    		<a href="javascript:void(0);" onclick="GPS.showWin();" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-flag">定位显示</a>
+			<a href="javascript:void(0)"  onclick="showQueryWin();" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-zoom">周边信息查询</a>
+			<a href="javascript:void(0)"  onclick="showLayerWin();" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-database">业务图层数据管理</a>
+			<a href="javascript:void(0)"  onclick="showImgMarkWin();" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-graphy">图片信息标注点管理</a>
+			<a href="javascript:void(0)"  onclick="window.location.href='admin/index.html'" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-settings">系统管理</a>
+		</div>
+    	<div id="mytab" class="easyui-tabs" data-options="tabHeight:30,fit:true,border:false,tools:'#tab-tools'">
+    		<div id="allmap" title="主窗口" style="padding:0px;overflow:hidden;">
+    			<div id="jstree_demo_div"></div>
+    		</div>
+    	</div>
+    </div>
+</body>
+</html>

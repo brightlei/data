@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>角色管理</title>
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="js/admin_role.js?t=1"></script>
+  </head>
+<body class="easyui-layout">
+	<div data-options="region:'west',split:true,title:'角色管理'" style="width:260px;padding:5px;">
+		<div id="tb" style="padding:5px;">
+			<a class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addRole()">添加角色</a>
+			<a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteRole()">删除角色</a>
+		</div>
+		<div id="dg"></div>
+	</div>
+	<div data-options="region:'east',split:true,title:'角色数据权限'" style="width:360px;padding:5px;">
+		<div class="easyui-layout" fit="true">
+			<div data-options="region:'north'" style="height:38px;padding:5px;overflow:hidden;">
+				<a class="easyui-linkbutton" iconCls="icon-save" onclick="saveDataRole()">设置角色数据权限</a>
+			</div>
+			<div data-options="region:'center'" style="padding:5px;">
+				<ul id="dataTree" class="easyui-tree" data-options="lines:true,animate:true"></ul>
+			</div>
+		</div>
+	</div>
+	<div data-options="region:'center',title:'角色页面权限'" style="padding:5px;">
+		<div class="easyui-layout" fit="true">
+			<div data-options="region:'north'" style="height:38px;padding:5px;overflow:hidden;">
+				<a class="easyui-linkbutton" iconCls="icon-save" onclick="savePageRole()">设置角色页面权限</a>
+			</div>
+			<div data-options="region:'center'" style="padding:5px;">
+				<ul id="pageTree" class="easyui-tree" data-options="lines:true,animate:true"></ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

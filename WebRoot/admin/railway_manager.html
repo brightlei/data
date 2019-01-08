@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>铁路线路管理</title>
+    <style type="text/css">
+    .radiocss{position:relative;top:3px;}
+    .inputcss{padding:5px;border:1px solid #f7f7f7;}
+    .dataTable td{padding:5px;}
+    .tools{position:absolute;left:5px;top:5px;z-index:99;background:#fff;border:1px solid #aaa;padding:5px;}
+    .dgbox{position:absolute;left:5px;top:50px;z-index:99;background:#fff;padding:0px;width:280px;height:480px;}
+    </style>
+    <script type="text/javascript" src="../jslib/jeasyui.js"></script>
+    <script type="text/javascript" src="../jslib/ajax.js"></script>
+    <script type="text/javascript" src="../jslib/point_transform.js"></script>
+    <script type="text/javascript" src="js/admin_railway.js?t=1231112"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=O6u2zzUKRRCmET0uxe1RR4fq"></script>
+    <script type="text/javascript" src="../jsweb/baidu-map.js"></script>
+    <script type="text/javascript" src="../layer/layer.js"></script>
+	<script type="text/javascript" src="../layer/layer-common.js"></script>
+</head>
+<body style="background:#FFFFFF;overflow:hidden;" class="easyui-layout" onload="onloadComplete()">
+	<div data-options="region:'center',border:false" style="padding:0px;overflow:hidden;">
+		<div class="tools">
+			<select class="easyui-combobox" id="line" name="line" label="铁路线:" labelPosition="left" valueField="linenum" textField="linename" editable="false" style="width:280px;height:26px;">
+				
+			</select>
+		</div>
+		<div class="dgbox">
+			<div id="tb" style="padding:5px;">
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="startAddAction()">添加</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-standard-cross',plain:true" onclick="stopAddAction()">结束添加</a>
+				<span style="float:right;margin:5px;">共【<label id="pointCount">0</label>】个点</span>
+			</div>
+			<table id="dg" style="position:absolute;left:5px;top:90px;z-index:99;"></table>
+		</div>
+		<div id="allmap" style="width:100%;height:100%;"></div>
+    </div>
+	<div id="formWin" style="padding:10px;overflow:hidden;">
+		<form id="myform">
+			<input type="hidden" id="id" name="id" value=""/>
+			<div style="margin-bottom:10px">
+				<input id="linenum" name="linenum" class="easyui-textbox" label="线号:" labelPosition="left" data-options="prompt:'请输入铁路线号',required:true" style="height:30px;width:300px;">
+			</div>
+			<div style="margin-bottom:10px">
+				<input id="name" name="name" class="easyui-textbox" label="线名:" labelPosition="left" data-options="prompt:'请输入铁路线名',required:true" style="height:30px;width:300px;">
+			</div>
+		</form>
+	</div>
+</body>
+</html>

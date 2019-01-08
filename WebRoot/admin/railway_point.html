@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>铁路线坐标点管理</title>
+    <style type="text/css">
+    .radiocss{position:relative;top:3px;}
+    .inputcss{padding:5px;border:1px solid #f7f7f7;}
+    .dataTable td{padding:5px;}
+    </style>
+    <script type="text/javascript" src="../jslib/jeasyui.js"></script>
+    <script type="text/javascript" src="../jslib/ajax.js"></script>
+    <script type="text/javascript" src="../jslib/point_transform.js"></script>
+    <script type="text/javascript" src="js/admin_linepoint.js?t=1231178"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=O6u2zzUKRRCmET0uxe1RR4fq"></script>
+</head>
+<body style="background:#FFFFFF;overflow:hidden;" class="easyui-layout" onload="onloadComplete()">
+	<div id="mapWin" title="地图窗口" class="easyui-window" data-options="maximized:true,minimizable:false,maximizable:false,closed:true">
+		<div id="allmap" style="width:100%;height:100%;background:red;"></div>
+	</div>
+	<div id="formWin" title="表字段添加表单" class="easyui-window" data-options="closed:true,modal:true" style="width:660px;height:380px;padding:5px;overflow:hidden;">
+		<form id="myform">
+			<input type="hidden" id="id" name="id" value=""/>
+			<input type="hidden" id="op" name="op" value="add"/>
+			<input type="hidden" id="method" name="method" value="addLinePoint"/>
+			<table class="dataTable" border="1" bordercolor="#ccc" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+				<tr>
+					<td style="width:110px;text-align:right;">线名：</td>
+					<td><input id="name" name="name" class="easyui-textbox" data-options="required:true,prompt:'请输入线名，例如：焦柳下'" style="width:100%;height:30px;"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">线号：</td>
+					<td><input id="linenum" name="linenum" class="easyui-textbox" data-options="required:true,prompt:'请输入线名，例如：32772'" style="width:100%;height:30px;"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">方向：</td>
+					<td><input id="direction" name="direction" class="easyui-textbox" data-options="required:true,prompt:'请输入线名，例如：正'" style="width:100%;height:30px;"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">长链：</td>
+					<td><input id="longchain" name="longchain" class="easyui-textbox" data-options="prompt:'请输入长链'" style="width:100%;height:30px;"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">度分秒经度：</td>
+					<td>
+						<input type="text" id="degree_lon" value="112" style="width:30px;height:22px;" onkeyup="initLon()"/>°
+						<input type="text" id="minute_lon" value="30" style="width:30px;height:22px;" onkeyup="initLon()"/>′
+						<input type="text" id="second_lon" value="15.6" style="width:30px;height:22px;" onkeyup="initLon()"/>″
+						<input id="lonstr" name="lonstr" class="easyui-textbox" data-options="readonly:true,required:true,prompt:'请输入度分秒经度，例如：112°30′15.6″'" value="112°30′15.6″" style="width:90px;height:30px;">
+						<a class="easyui-linkbutton" iconCls="icon-standard-resultset-next" title="度分秒转数值" onclick="dmfTojwd('lonstr','longitude')"></a>
+						<a class="easyui-linkbutton" iconCls="icon-standard-resultset-previous" title="数值转度分秒" onclick="jwdTodfm('longitude','lonstr')"></a>
+						<input id="longitude" name="longitude" class="easyui-textbox" data-options="required:true,prompt:'请输入数值经度，例如：112.50433'" value="112.50433333333334" style="width:190px;height:30px;">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">度分秒纬度：</td>
+					<td>
+						<input type="text" id="degree_lat" value="34" style="width:30px;height:22px;" onkeyup="initLat()"/>°
+						<input type="text" id="minute_lat" value="41" style="width:30px;height:22px;" onkeyup="initLat()"/>′
+						<input type="text" id="second_lat" value="9.5" style="width:30px;height:22px;" onkeyup="initLat()"/>″
+						<input id="latstr" name="latstr" class="easyui-textbox" data-options="readonly:true,required:true,prompt:'请输入度分秒纬度，例如：34°41′09.5″'" value="34°41′09.5″" style="width:90px;height:30px;">
+						<a class="easyui-linkbutton" iconCls="icon-standard-resultset-next" title="度分秒转数值" onclick="dmfTojwd('latstr','latitude')"></a>
+						<a class="easyui-linkbutton" iconCls="icon-standard-resultset-previous" title="数值转度分秒" onclick="jwdTodfm('latitude','latstr')"></a>
+						<input id="latitude" name="latitude" class="easyui-textbox" data-options="required:true,prompt:'请输入数值经度，例如：34.68597'" value="34.68597222222222" style="width:190px;height:30px;">
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right;">里程：</td>
+					<td><input id="mileage" name="mileage" class="easyui-numberbox" data-options="required:true,min:0,precision:4,prompt:'请输入里程，例如：102.8'" style="width:100%;height:30px;"></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<a href="javascript:void(0)" class="easyui-linkbutton c9" data-options="iconCls:'icon-ok'" onclick="doSubmitAction()" style="width:70px;height:30px;">提交</a>
+						<a href="javascript:void(0)" class="easyui-linkbutton c2" data-options="iconCls:'icon-cancel'" onclick="cancel()" style="width:70px;height:30px;">取消</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div data-options="region:'center',border:false" style="padding:5px;">
+		<div id="tb" style="padding:5px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addAction()">添加</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editAction()">修改</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteAction()">删除</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-standard-application-put',plain:true" onclick="showUploadWin()">批量导入</a>
+			<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+			<div style="float:right;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-hamburg-world'" onclick="showMapWin()">地图显示</a></div>
+		</div>
+		<table id="dg"></table>
+      </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"> -->
+    <title>铁路查询与管理系统</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css?t=1">
+	<script type="text/javascript" src="jslib/server.js"></script>
+	<script type="text/javascript" src="jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="jslib/jquery.cookie.js"></script>
+	<script type="text/javascript" src="jslib/Calender.js"></script>
+	<script type="text/javascript" src="jslib/point_transform.js?t=1"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=O6u2zzUKRRCmET0uxe1RR4fq&services=&t=20170926125934"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="layer/layer-common.js"></script>
+	<script type="text/javascript" src="jsweb/baidu-map.js?t=1"></script>
+	<script type="text/javascript" src="jsweb/web-fun.js?t=12"></script>
+</head>
+<body id="layout" class="easyui-layout" onload="onloadComplete()">
+    <div data-options="region:'north',border:false" style="height:60px;overflow:hidden;/*background:#002C49;*/background:url(images/bg.jpg);">
+    	<div style="font:36px 微软雅黑;font-weight:bold;">
+    		<span style="float:left;margin-left:12px;margin-top:2px;color:#fff;">铁路数据查询与管理系统</span>
+    	</div>
+		<div id="div_calender" style="position:absolute;right:0px;top:1px;padding:2px 5px;font:13px 微软雅黑;font-weight:bold;color:#fff;"></div>
+		<div style="position:absolute;bottom:5px;right:5px;">
+			<span style="color:#fff;font:14px 微软雅黑;font-weight:bold;padding:5px;">欢迎您：<span id="userxm"></span></span>
+			<a id="fav" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cologne-star'">收藏本页</a>
+		    <a href="logout.jsp" class="easyui-linkbutton" data-options="toggle:true,iconCls:'icon-cologne-logout'">注销登录</a>
+        </div>
+    </div>
+    <div id="westRegion" data-options="region:'west',collapsed:false,minWidth:268,split:true,title:'业务图层数据查询',onCollapse:function(){westPanel='close';},onExpand:function(){westPanel='open';}" style="width:320px;padding:0px;overflow:hidden;">
+    	<iframe id="queryframe" name="queryframe" title="" style="width:100%;height:100%;display:none;" frameborder="0" src=""></iframe>
+    	<iframe id="dataframe" name="dataframe" style="width:100%;height:100%;" frameborder="0" src="web/layerdata.html?type=map"></iframe>
+    </div>
+    <div data-options="region:'center'" style="padding:0px;overflow:hidden;">
+    	<div id="tab-tools" style="border-top:0px;">
+    		<a href="javascript:void(0);" onclick="showUserPosition();" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-flag">定位显示</a>
+			<a href="javascript:void(0)"  onclick="showNavMenuPage('queryframe','web/query.html','周边信息查询');" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-zoom">周边信息查询</a>
+			<a href="javascript:void(0)"  onclick="showNavMenuPage('dataframe','web/layerdata.html?type=map','业务图层数据查询');" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-database">业务图层数据查询</a>
+			<a href="javascript:void(0)"  onclick="showNavMenuPage('imgmarkWin','web/imgmark.html');" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-graphy" style="display:none;">图片信息标注点管理</a>
+			<a href="javascript:void(0)"  onclick="window.location.href='admin/index.html'" class="easyui-linkbutton" plain="true" iconCls="icon-hamburg-settings">系统管理</a>
+		</div>
+    	<div id="mytab" class="easyui-tabs" data-options="tabHeight:30,fit:true,border:false,tools:'#tab-tools'">
+    		<div id="allmap" title="主窗口" style="padding:0px;overflow:hidden;"></div>
+    	</div>
+    </div>
+</body>
+</html>

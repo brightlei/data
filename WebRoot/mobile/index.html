@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>铁路数据查询与管理系统</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<style>
+			body,html{width:100%;height:100%;}
+		</style>
+	</head>
+	<body>
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="#allmap">
+				<span class="mui-icon mui-icon-map"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat">
+				<span class="mui-icon mui-icon-list"><span class="mui-badge">9</span></span>
+				<span class="mui-tab-label">周边查询</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact">
+				<span class="mui-icon mui-icon-image"></span>
+				<span class="mui-tab-label">图层查询</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-map">
+				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-tab-label">设置</span>
+			</a>
+		</nav>
+		<div class="mui-content">
+			<div id="allmap" class="mui-control-content mui-active" style="height:100%;">
+				
+			</div>
+			<div id="tabbar-with-chat" class="mui-control-content">
+				<div class="title">这是div模式选项卡中的第2个子页面，该页面展示一个消息列表</div>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 1</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 2</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 3</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 4</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 5</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 6</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 7</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 8</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 9</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 10</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 11</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 12</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 13</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 14</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 15</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 16</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 17</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 18</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 19</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">Item 20</a></li>
+				</ul>
+				
+			</div>
+			<div id="tabbar-with-contact" class="mui-control-content">
+				<div class="title">这是div模式选项卡中的第3个子页面，该页面展示一个通讯录示例.</div>
+				
+			</ul>
+			</div>
+			<div id="tabbar-with-map" class="mui-control-content">
+				<div class="title">这是div模式选项卡中的第4个子页面，该页面展示一个常见的设置示例.</div>
+				<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						菜单一
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						菜单二
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						菜单三
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 25px;">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						菜单四
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 25px;">
+				<li class="mui-table-view-cell">
+					<a style="text-align: center;color: #FF3B30;">
+						退出登录
+					</a>
+				</li>
+			</ul>
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=O6u2zzUKRRCmET0uxe1RR4fq"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		$(function(){
+			autoHeight();
+		});
+		function autoHeight(){
+			var h = $(document.body).height();
+			$(".mui-content").height(h-51);
+		}
+		// 百度地图API功能
+		var map = new BMap.Map("allmap",{enableMapClick:false});    // 创建Map实例
+		var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); 
+		map.addControl(top_right_navigation);
+		//map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+		/**
+		// 添加定位控件
+		var geolocationControl = new BMap.GeolocationControl();
+		geolocationControl.addEventListener("locationSuccess", function(e) {
+			// 定位成功事件
+			var address = '';
+			address += e.addressComponent.province;
+			address += e.addressComponent.city;
+			address += e.addressComponent.district;
+			address += e.addressComponent.street;
+			address += e.addressComponent.streetNumber;
+			alert("当前定位地址为：" + address);
+		});
+		geolocationControl.addEventListener("locationError", function(e) {
+			// 定位失败事件
+			alert(e.message);
+		});
+		map.addControl(geolocationControl);
+		*/
+		map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+		//自动定位到当前位置
+		var geolocation = new BMap.Geolocation();
+		geolocation.getCurrentPosition(function(r) {
+			if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+				var mk = new BMap.Marker(r.point);
+				map.addOverlay(mk);
+				//map.panTo(r.point);
+				map.centerAndZoom(r.point, 16);  // 初始化地图,设置中心点坐标和地图级别
+				//alert("当前位置经度为:" + r.point.lng + "纬度为:" + r.point.lat);
+				//setLocation(r.point);
+			} else {
+				//$("#start").attr("placeholder", "请输入您的当前位置")
+				alert('无法定位到您的当前位置，导航失败，请手动输入您的当前位置！' + this.getStatus());
+			}
+		}, {
+			enableHighAccuracy : true
+		});
+		//获取地理位置的函数
+		function setLocation(point) {
+			geoc.getLocation(point, function(rs) {
+				var addComp = rs.addressComponents;
+				var result = addComp.province + addComp.city + addComp.district
+						+ addComp.street + addComp.streetNumber;
+				//$("#start").val(result);
+				//$("#start_location").val(result);
+				alert("当前的位置为:" + result);
+			});
+		}
+	</script>
+</html>

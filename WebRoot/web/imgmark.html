@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>基于图片的标注管理模块</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="../jsweb/imgmark.js"></script>
+  </head> 
+<body style="background:#FFFFFF;" class="easyui-layout">
+	<div data-options="region:'west'" style="width:230px;padding:5px;">
+        <table id="dg" title="图层数据列表" class="easyui-datagrid" data-options="
+			fit:true,
+			rownumbers:false,
+			singleSelect:true">
+			<thead>
+				<tr>
+					<th field="op" width="40">操作</th>
+					<th field="name" width="90">数据名称</th>
+					<th field="markcount" width="90">标注点数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a href="javacsript:void(0)" style="color:orange;font-weight:bold;">查看</a></td>
+					<td>武昌站</td>
+					<td>3</td>
+				</tr>
+			</tbody>
+		</table>
+    </div>
+	<div id="regionCenter" data-options="region:'center'" style="padding:5px;">
+		<div id="mytab" class="easyui-tabs" fit="true">
+			<div title="表格显示">
+				<table id="dg-mark" title="图片标注列表" class="easyui-datagrid" data-options="
+				fit:true,
+				rownumbers:true,
+				singleSelect:true">
+				<thead>
+					<tr>
+						<th field="name" width="130">标注名称</th>
+						<th field="description" width="160">描述信息</th>
+						<th field="xrate" width="80">X坐标比</th>
+						<th field="yrate" width="80">Y坐标比</th>
+						<th field="person" width="80">创建人</th>
+						<th field="createtime" width="170">创建时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>标注点1</td>
+						<td>这里是一个重点的点</td>
+						<td>0.23</td>
+						<td>0.34</td>
+						<td>管理员</td>
+						<td>2017-05-22 07:00:00</td>
+					</tr>
+					<tr>
+						<td>标注点2</td>
+						<td>这里是一个重点的点</td>
+						<td>0.33</td>
+						<td>0.44</td>
+						<td>管理员</td>
+						<td>2017-05-22 07:00:00</td>
+					</tr>
+					<tr>
+						<td>标注点3</td>
+						<td>这里是一个重点的点</td>
+						<td>0.53</td>
+						<td>0.54</td>
+						<td>管理员</td>
+						<td>2017-05-22 07:00:00</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+			<div title="图片显示" id="imgdiv">
+				<img id="img" src="../upload/data/layerdata-1.jpg" style="width:100%;"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

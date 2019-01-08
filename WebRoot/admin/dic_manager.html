@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>数据字典管理</title>
+    <style type="text/css">
+    .inputcss{padding:5px;border:1px solid #f7f7f7;}
+    </style>
+    <script type="text/javascript" src="../jslib/jeasyui.js"></script>
+	<script type="text/javascript" src="js/admin_dic.js?t=1234"></script>
+  </head>
+<body class="easyui-layout">
+	<!-- 添加字典分类窗口 -->
+	<div id="dicWin" title="字典分类管理" class="easyui-window" data-options="collapsible:false,minimizable:false,maximizable:false,closed:true" style="width:450px;height:240px;padding:0px;">
+		<table id="tbForm" class="dataTable" border="1" bordercolor="#95B8E7" cellpadding="0" cellspacing="0" style="width:100%;">
+			<tr>
+				<td style="width:70px;text-align:right;">记录ID：</td>
+				<td><input type="text" class="disabled" id="dic_id" disabled style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字典编码：</td>
+				<td><input type="text" class="input122" id="dic_code" style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字典名称：</td>
+				<td><input type="text" class="input122" id="dic_name" style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding-left:30px;"><a href="javascript:void(0)" class="easyui-linkbutton c9" iconCls="icon-ok" style="width:70px;height:30px;" onclick="saveOrUpdate()">提交</a></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 添加字典分类明细窗口 -->
+	<div id="dicdataWin" title="字典明细表单" class="easyui-window" data-options="collapsible:false,minimizable:false,maximizable:false,closed:true" style="width:500px;height:300px;padding:5px;">
+		<table id="dicForm" class="dataTable" border="1" bordercolor="#95B8E7" cellpadding="0" cellspacing="0" style="width:100%;">
+			<input type="hidden" id="dicdata_id" value=""/>
+			<input type="hidden" id="dicdata_diccode" value=""/>
+			<tr>
+				<td style="width:100px;text-align:right;">字典明细编码：</td>
+				<td><input type="text" id="dicdata_code" maxlength=30 style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字典明细名称：</td>
+				<td><input type="text" class="input122" id="dicdata_name" maxlength=30 style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">字典排序：</td>
+				<td><input type="text" class="input122" id="dicdata_rank" maxlength=10 style="width:300px;padding:5px;"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding-left:30px;">
+					<a href="javascript:void(0)" class="easyui-linkbutton c9" iconCls="icon-ok" style="width:70px;height:30px;" onclick="saveOrUpdateDicData()">提交</a>
+					<span id="opDicMessage" class="ajaxTipsMsg" style="display:none;"></span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div data-options="region:'west',border:false" style="width:230px;padding:5px;">
+		<div id="tb" style="padding:5px;">
+			<a class="easyui-linkbutton c9" data-options="iconCls:'icon-add'" onclick="addAction()">添加</a>
+			<a class="easyui-linkbutton c1" data-options="iconCls:'icon-edit'" onclick="editAction()">编辑</a>
+			<a class="easyui-linkbutton c5" data-options="iconCls:'icon-remove'" onclick="removeAction()">删除</a>
+			<div id="opMessage" class="ajaxTipsMsg" style="display:none;"></div>
+		</div>
+		<table id="dg" title="字典列表" class="easyui-datagrid" data-options="
+			fit:true,
+			rownumbers:true,
+			singleSelect:true,
+			toolbar:'#tb',
+			onClickRow:onClickRow
+			">
+			<thead>
+				<tr>
+					<th field="name" width="180">字典名称</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div data-options="region:'center',border:false" style="padding:5px;">
+		<div id="dictb" style="padding:5px;">
+			<a class="easyui-linkbutton c9" data-options="iconCls:'icon-add'" onclick="addDicAction()">添加</a>
+			<a class="easyui-linkbutton c1" data-options="iconCls:'icon-edit'" onclick="editDicAction()">编辑</a>
+			<a class="easyui-linkbutton c5" data-options="iconCls:'icon-remove'" onclick="removeDicAction()">删除</a>
+		</div>
+		<table id="dglist" title="字典数据列表" class="easyui-datagrid" data-options="
+			fit:true,
+			rownumbers:true,
+			singleSelect:true,
+			autoRowHeight:false,
+			toolbar:'#dictb'">
+			<thead>
+				<tr>
+					<th field="code" width="200">字典明细编码</th>
+					<th field="name" width="200">字典明细名称</th>
+					<th field="rank" width="100">排序</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</body>
+</html>

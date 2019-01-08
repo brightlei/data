@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>百度地图</title>
+    <style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	ul,li,i,dl,dd,form,p{padding:0;margin:0;}
+	i{font-style:normal;}
+	ul{list-style:none;}
+	.ruteInput{width:300px;background:none;outline:none;border:none;font:14px 微软雅黑;padding:0px 5px;margin-top:10px;}
+	.btn{display:none;cursor:pointer;display:inline-block;width:60px;height:40px;background:#eee;float:right;text-align:center;line-height:40px;font-weight:bold;}
+	.fromList{overflow:hidden;cursor:pointer;}
+	.fromList li{overflow:hidden;margin:0px 0px;padding:5px 3px;}
+	.fromList li:hover{background:#f0f0f0;}
+	.fromList li span{display:inline-block;float:left;font:12px 微软雅黑;font-weight:bold;color:#999;line-height:20px;padding:0px 3px;}
+	.fromList li i{display:inline-block;float:left;font:12px 微软雅黑;color:#369ef7;line-height:20px;padding:0px 8px;}
+	#searchDiv{position:absolute;left:20px;top:20px;z-index:999;height:40px;background:#fff;padding:0px;}
+	#placeSuggest{position:absolute;left:20px;top:60px;z-index:999;background:#fff;}
+	</style>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script type="text/javascript" src="../jslib/server.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=O6u2zzUKRRCmET0uxe1RR4fq"></script>
+    <script type="text/javascript" src="../jslib/jeasyui.js"></script>
+    <script type="text/javascript" src="../jslib/ajax.js"></script>
+    <script type="text/javascript" src="../jslib/point_transform.js"></script>
+    <script type="text/javascript" src="../jsweb/baidu-map.js?t=1"></script>
+  </head>
+  
+  <body onload="onloadComplete()">
+  	<div id="searchDiv" style="border:1px solid #f7f7f7;">
+  		<input id="keyword" type="text" class="ruteInput" onkeyup="onkeyupEvent(this)" placeholder="请输入查询关键字..."/>
+  		<!-- <span class="btn">查询</span> -->
+  	</div>
+  	<div id="placeSuggest" style="width:300px;margin:0px auto;padding:5px;border:1px solid #f7f7f7;display:none;">
+		<ul class="fromList"></ul>
+	</div>
+    <div id="allmap" style="width:100%;height:100%;background:red;"></div>
+  </body>
+</html>
+<script type="text/javascript">
+	(function ($) {
+        $.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    })(jQuery);
+	//页面加载完成事件
+	function onloadComplete(){
+		initMap();
+		//var lon = 113;
+		//var lat = 30.32;
+		var lon = $.getUrlParam("x");
+		var lat = $.getUrlParam("y");
+		if(lon!=null&&lon!=""&&lat!=null&&lat!=""){
+			addMarker(lon,lat,lon+","+lat);
+		}
+		map.addEventListener('click',function (e) {
+			//alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
+		 	addMarker(e.point.lng,e.point.lat,e.point.lng+","+e.point.lat);
+		});
+	}
+	var timeout=null;
+	function onkeyupEvent(obj){
+		var keyword = obj.value;
+		var objid = obj.id;
+		clearTimeout(timeout);
+		timeout = setTimeout(function(){
+			getPlaceSuggestion(keyword,objid);
+		},300);
+	}
+	//获取地名建议列表
+	function getPlaceSuggestion(keyword,objid){
+		Ajax.getSuggectLocation(keyword,
+		function(json){
+			var state = json.state;
+			if(state){
+				var data = eval("("+json.data+")");;
+				var count = data.length;
+				var sb = new Array();
+				var point = null;
+				sb.push('<ul class="fromList">');
+				for(var i=0;i<count;i++){
+					point = data[i].location;
+					if(point!=null){
+						sb.push('<li lon="'+point.lng+'" lat="'+point.lat+'" placeName="'+data[i].name+'"><span>'+data[i].name+'</span><i>'+data[i].city+data[i].district+'</i></li>');
+					}
+				}
+				sb.push('</ul>');
+				$("#placeSuggest").html(sb.join(""));
+				$("#placeSuggest").css("display","");
+				$("#placeSuggest li").unbind("click");
+				$("#placeSuggest li").bind("click",function(){
+					var name = $(this).attr("placeName");
+					var lon = $(this).attr("lon");
+					var lat = $(this).attr("lat");
+					$("#"+objid).val(name);
+					$("#"+objid).attr("lon",lon);
+					$("#"+objid).attr("lat",lat);
+					$("#placeSuggest").css("display","none");
+					addMarker(lon,lat,name);
+				});
+			}
+		});
+	}
+	var marker = null;
+	function addMarker(lon,lat,text){
+		 var point = new BMap.Point(lon,lat);
+		 // 创建标注对象并添加到地图   
+		 marker = new BMap.Marker(point);
+		 map.clearOverlays();
+		 map.addOverlay(marker);
+		 var label = new BMap.Label(text,{offset:new BMap.Size(20,0)});
+		 marker.setLabel(label);
+		 map.centerAndZoom(new BMap.Point(lon, lat), 19);
+		 if(parent!=null){
+		 	//var lonlat = PointConvert.bd09towgs84(lon, lat);
+		 	//parent.setUserPosition(lonlat.lon,lonlat.lat);
+		 	parent.setUserPosition(lon,lat);
+		 }
+	}
+</script>
